@@ -2,7 +2,8 @@ from bitarray import bitarray
 
 from ._instruction import Instruction
 from .microcode import Microcode, NO_OP
-from .types import Bit, nibble, Pointer, MISSING
+from .types import Bit, nibble, Pointer
+from .validators import validate_ptr
 
 FETCH_STATE = [
     Microcode(MI=Bit(1), OC=Bit(1)),
@@ -11,6 +12,7 @@ FETCH_STATE = [
 ]
 
 
+@validate_ptr
 def lda(ptr: Pointer) -> Instruction:
     """
     load the accumulator (A register) with value at *ptr
@@ -21,7 +23,6 @@ def lda(ptr: Pointer) -> Instruction:
     Returns:
         (Instruction) object
     """
-    assert ptr != MISSING, "pointer was not provided!"
     opcode = bitarray('0000')
     states = [
         *FETCH_STATE,  # unpack the fetch state
@@ -35,7 +36,7 @@ def lda(ptr: Pointer) -> Instruction:
     return Instruction(mnemonic="LDA", opcode=opcode, states=states, operand=ptr)
 
 
-def hlt(*args) -> Instruction:
+def hlt(**kwargs) -> Instruction:
     """
     Halt instruction
 
@@ -54,6 +55,7 @@ def hlt(*args) -> Instruction:
     return Instruction(mnemonic="HLT", opcode=opcode, states=states)
 
 
+@validate_ptr
 def add(ptr: Pointer, subtract: Bit = Bit(0)) -> Instruction:
     """
     add the value *ptr and store the result in register A
@@ -65,7 +67,6 @@ def add(ptr: Pointer, subtract: Bit = Bit(0)) -> Instruction:
     Returns:
         (Instruction) object
     """
-    assert ptr != MISSING, "pointer was not provided!"
     opcode = bitarray('0001')
     states = [
         *FETCH_STATE,  # unpack the fetch state
@@ -82,6 +83,7 @@ def add(ptr: Pointer, subtract: Bit = Bit(0)) -> Instruction:
     return Instruction(mnemonic="ADD", opcode=opcode, states=states, operand=ptr)
 
 
+@validate_ptr
 def sub(ptr: Pointer) -> Instruction:
     """
     Subtract operation.
@@ -94,7 +96,6 @@ def sub(ptr: Pointer) -> Instruction:
     Returns:
         (Instruction) subtract instruction
     """
-    assert ptr != MISSING, "pointer was not provided!"
 
     instruction = add(ptr, subtract=Bit(1))
     instruction.mnemonic = "SUB"

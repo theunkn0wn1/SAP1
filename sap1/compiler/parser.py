@@ -8,9 +8,9 @@ import typing
 
 from .. import instruction_set
 from ..instruction_set import Instruction
-from ..instruction_set.types import MISSING
+from ..instruction_set.types import MISSING, nibble
 
-LOG = logging.getLogger(f"mecha.{__name__}")
+LOG = logging.getLogger(f"sap1.{__name__}")
 
 
 def get_instruction_func(mnemonic: str) -> typing.Callable:
@@ -29,7 +29,7 @@ def get_instruction_func(mnemonic: str) -> typing.Callable:
     return getattr(instruction_set, mnemonic.lower())
 
 
-def process_line(line: str) -> typing.Optional[Instruction]:
+def parse_line(line: str) -> typing.Optional[Instruction]:
     """
     processes a ASM line into an instruction
     Args:
@@ -68,5 +68,9 @@ def process_line(line: str) -> typing.Optional[Instruction]:
     # get the constructor and build the instruction
 
     constructor = get_instruction_func(mnemonic)
-    LOG.debug(constructor)
-    return constructor(operand)
+    LOG.debug(f"constructor := {constructor}")
+    LOG.debug(f"operand:= {operand}")
+    # cast the ptr to a nibble if the operand is not MISSING
+    ptr = nibble(int(operand)) if operand is not MISSING else MISSING
+    LOG.debug(f"operand:= {operand}\tptr:={ptr}")
+    return constructor(ptr=ptr)
