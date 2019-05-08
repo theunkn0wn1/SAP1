@@ -1,6 +1,8 @@
 import typing
 
 # Bit = typing.NewType("Bit", int)
+from typing import Union
+
 from bitarray import bitarray
 
 """
@@ -16,3 +18,6 @@ def nibble(ptr: int = 0) -> bitarray:
     """
     assert 0xf >= ptr >= 0, "value out of range"
     return bitarray(f"{bin(ptr)[2:]:{0}>4}")
+
+
+Pointer = Union[bitarray, int]

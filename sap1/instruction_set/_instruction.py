@@ -13,7 +13,7 @@ class Instruction:
     Abstract instruction
     """
 
-    phonemic: str
+    mnemonic: str
     opcode: bitarray
     states: typing.List[Microcode]
     operand: bitarray = field(default=nibble())
