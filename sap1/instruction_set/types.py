@@ -21,3 +21,7 @@ def nibble(ptr: int = 0) -> bitarray:
 
 
 Pointer = Union[bitarray, int]
+MISSING = object()
+"""
+Used to represent a missing operand
+"""
