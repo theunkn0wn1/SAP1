@@ -2,7 +2,7 @@ from bitarray import bitarray
 
 from ._instruction import Instruction
 from .microcode import Microcode, NO_OP
-from .types import Bit, nibble, Pointer
+from .types import Bit, Pointer
 from .validators import validate_ptr
 
 FETCH_STATE = [
@@ -30,9 +30,6 @@ def lda(ptr: Pointer) -> Instruction:
         Microcode(RO=Bit(1), AI=Bit(1)),  # load *operand from RAM into Register A
         NO_OP  # t=6, no operation
     ]
-    if isinstance(ptr, int):
-        # left pad binary representation of ptr with zeros, then build a bitarray from that
-        ptr = nibble(ptr)
     return Instruction(mnemonic="LDA", opcode=opcode, states=states, operand=ptr)
 
 
@@ -77,9 +74,6 @@ def add(ptr: Pointer, subtract: Bit = Bit(0)) -> Instruction:
         # push ALU result into register A
         Microcode(AI=Bit(1), EpsilonOut=Bit(1))
     ]
-    if isinstance(ptr, int):
-        # left pad binary representation of ptr with zeros, then build a bitarray from that
-        ptr = nibble(ptr)
     return Instruction(mnemonic="ADD", opcode=opcode, states=states, operand=ptr)
 
 
