@@ -52,4 +52,4 @@ def hlt() -> Instruction:
         NO_OP  # t=6, no operation
     ]
 
-    return Instruction(phonemic="LDA", opcode=opcode, states=states)
+    return Instruction(phonemic="HLT", opcode=opcode, states=states)
