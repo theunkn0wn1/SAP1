@@ -4,6 +4,7 @@ ASM parsing library
 from __future__ import annotations
 
 import logging
+import pathlib
 import typing
 
 from .. import instruction_set
@@ -74,3 +75,24 @@ def parse_line(line: str) -> typing.Optional[Instruction]:
     ptr = nibble(int(operand)) if operand is not MISSING else MISSING
     LOG.debug(f"operand:= {operand}\tptr:={ptr}")
     return constructor(ptr=ptr)
+
+
+def parse_file(path: pathlib.Path) -> typing.List[Instruction]:
+    """
+    Parse the specified ASM file into a list of Instruction objects
+
+    Args:
+        path (pathlib.Path): path to target ASM
+
+    Returns:
+        List of :class:`Instruction` objects
+    """
+    # read the file into memory
+    data = path.read_text()
+    # split each line off
+    lines = data.split("\n")
+    # filter out empty lines and lines that just contain whitespace
+    # as well as those that start with comments
+    lines = [line for line in lines if not(line.isspace() or not line or line.rstrip().startswith("#"))]
+    print(lines)
+    return lines
