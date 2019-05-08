@@ -25,7 +25,7 @@ class Instruction:
         Returns:
             list of microcode instructions dumped to a bitarray
         """
-        raise NotImplementedError("not implemented yet!")
+        return [state.dump() for state in self.states]
 
     @property
     def machine_code(self) -> bitarray:
