@@ -4,7 +4,7 @@ from bitarray import bitarray
 
 from ._instruction import Instruction
 from .microcode import Microcode, NO_OP
-from .types import Bit
+from .types import Bit, nibble
 
 FETCH_STATE = [
     Microcode(MI=Bit(1), OC=Bit(1)),
@@ -31,5 +31,25 @@ def lda(ptr: Union[bitarray, int]) -> Instruction:
         NO_OP  # t=6, no operation
     ]
     if isinstance(ptr, int):
-        ptr = bitarray(bin(ptr)[2:])
+        # left pad binary representation of ptr with zeros, then build a bitarray from that
+        ptr = nibble(ptr)
     return Instruction(phonemic="LDA", opcode=opcode, states=states, operand=ptr)
+
+
+def hlt() -> Instruction:
+    """
+    Halt instruction
+
+    Returns:
+        (Instruction) halt object
+    """
+
+    opcode = bitarray('0000')
+    states = [
+        *FETCH_STATE,  # unpack the fetch state
+        Microcode(HLT=Bit(1)),  # t=3, set halt high
+        NO_OP,  # t=5, no operation
+        NO_OP  # t=6, no operation
+    ]
+
+    return Instruction(phonemic="LDA", opcode=opcode, states=states)
