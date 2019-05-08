@@ -100,3 +100,29 @@ def sub(ptr: Pointer) -> Instruction:
     instruction = add(ptr, subtract=Bit(1))
     instruction.mnemonic = "SUB"
     return instruction
+
+
+@validate_ptr
+def jmp(ptr: Pointer) -> Instruction:
+    """
+    Jump to ptr
+
+    Args:
+        ptr ():
+
+    Returns:
+
+    """
+
+    opcode = bitarray('0011')
+    states = [
+        *FETCH_STATE,  # unpack the fetch state
+        # Push operand from IR to PC via JMP flag
+        Microcode(IO=Bit(1), JMP=Bit(1)),
+        # no op
+        NO_OP,
+        # no op
+        NO_OP
+    ]
+
+    return Instruction(mnemonic="JMP", opcode=opcode, states=states, operand=ptr)
