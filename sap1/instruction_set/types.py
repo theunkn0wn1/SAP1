@@ -10,8 +10,9 @@ Binary one or zero
 Bit = typing.NewType("Bit", int)
 
 
-def nibble_factory() -> bitarray:
+def nibble(ptr: int = 0) -> bitarray:
     """
     return a 0 initialized nibble of bits (4 bits)
     """
-    return bitarray('0000')
+    assert 0xf >= ptr >= 0, "value out of range"
+    return bitarray(f"{bin(ptr)[2:]:{0}>4}")
