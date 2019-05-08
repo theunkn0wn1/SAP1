@@ -2,7 +2,7 @@ from bitarray import bitarray
 
 from ._instruction import Instruction
 from .microcode import Microcode, NO_OP
-from .types import Bit, nibble, Pointer
+from .types import Bit, nibble, Pointer, MISSING
 
 FETCH_STATE = [
     Microcode(MI=Bit(1), OC=Bit(1)),
@@ -21,6 +21,7 @@ def lda(ptr: Pointer) -> Instruction:
     Returns:
         (Instruction) object
     """
+    assert ptr != MISSING, "pointer was not provided!"
     opcode = bitarray('0000')
     states = [
         *FETCH_STATE,  # unpack the fetch state
@@ -34,7 +35,7 @@ def lda(ptr: Pointer) -> Instruction:
     return Instruction(mnemonic="LDA", opcode=opcode, states=states, operand=ptr)
 
 
-def hlt() -> Instruction:
+def hlt(*args) -> Instruction:
     """
     Halt instruction
 
@@ -64,6 +65,7 @@ def add(ptr: Pointer, subtract: Bit = Bit(0)) -> Instruction:
     Returns:
         (Instruction) object
     """
+    assert ptr != MISSING, "pointer was not provided!"
     opcode = bitarray('0001')
     states = [
         *FETCH_STATE,  # unpack the fetch state
@@ -92,6 +94,7 @@ def sub(ptr: Pointer) -> Instruction:
     Returns:
         (Instruction) subtract instruction
     """
+    assert ptr != MISSING, "pointer was not provided!"
 
     instruction = add(ptr, subtract=Bit(1))
     instruction.mnemonic = "SUB"

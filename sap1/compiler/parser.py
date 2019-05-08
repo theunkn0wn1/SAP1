@@ -47,16 +47,17 @@ def process_line(line: str) -> typing.Optional[Instruction]:
 
     # split the line up based on the presence of a comment
     sanitized_line = line.split("#")
+    LOG.debug(f"sanitized_line = {sanitized_line}")
     words = sanitized_line[0]
     # comment might not exist
     comment = sanitized_line[1] if len(sanitized_line) == 2 else None
+    LOG.debug(f"words(pre-strip):= {words}\tcomment:={comment}")
     # strip leading and trailing whitespace, ASM does not use whitespace for
     # control structures (or at least ours doesn't)
     words = words.strip()
-
     # split the words up into symbols
     symbols = words.split()
-
+    LOG.debug(f"symbols := {symbols}")
     if len(symbols) == 1:
         symbols.append(MISSING)
 
