@@ -94,5 +94,10 @@ def parse_file(path: pathlib.Path) -> typing.List[Instruction]:
     # filter out empty lines and lines that just contain whitespace
     # as well as those that start with comments
     lines = [line for line in lines if not(line.isspace() or not line or line.rstrip().startswith("#"))]
-    print(lines)
-    return lines
+    instructions = []
+    for line in lines:
+        instruction = parse_line(line)
+        if instruction:
+            instructions.append(instruction)
+
+    return instructions
