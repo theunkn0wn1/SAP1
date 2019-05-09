@@ -1,4 +1,5 @@
 import argparse
+import pathlib
 import typing
 
 from sap1 import instruction_set
@@ -36,9 +37,9 @@ def table_human_hex():
 
     """
     print(f"{'Word table':-^120}")
-    header = f"{'mnemonic': >12}| {'t': ^3}| {'address': ^9}| {'EEPROM 0': ^10}| { 'EEPROM 1': ^10} |"
+    header = f"{'mnemonic': >12}| {'t': ^3}| {'address': ^9}| {'EEPROM 0': ^10}| {'EEPROM 1': ^10} |"
 
-    print (header)
+    print(header)
     for mnemonic, instruction in instructions.items():
         print(f"{'.':.^120}")
         for i, code in enumerate(instruction.states):
@@ -47,12 +48,10 @@ def table_human_hex():
             word_as_bin = word.word.to01()
             eeprom = [word_as_bin[:8], word_as_bin[8:]]
 
-            line = f"{mnemonic: >12}| {i: ^3}| {addr.to01(): ^9}| {eeprom[0]: ^10}| " \
+            line = f"{mnemonic: >12}| {i: ^3}| {(int(addr.to01(), 2)): ^9X}| {eeprom[0]: ^10}| " \
                 f"{eeprom[1]: ^10} |"
 
             print(line)
-
-
 
 
 def table_hex() -> typing.Dict:
@@ -82,6 +81,8 @@ ______ _   _ _____ _    ______ ___________
     parser.add_argument("--truth-table", action="store_true",
                         help="display a human-readable truth table of firmware package")
     parser.add_argument("--word-table", action="store_true")
+    parser.add_argument("--output", help="directory to output computed firmware binaries ",
+                        default=...)
     args = parser.parse_args()
     instructions = {'LDA': instruction_set.lda(ptr=0),
                     'ADD': instruction_set.add(ptr=0),
@@ -94,5 +95,10 @@ ______ _   _ _____ _    ______ ___________
 
     if args.word_table:
         table_human_hex()
+
+    if args.output is not ...:
+        path = pathlib.Path(args.output)
+        print(f"{'Output':-^120}")
+        print(f"using {path.absolute()} for output....")
 
     print(f"{'  Done.  ':=^120}")
