@@ -96,8 +96,11 @@ def parse_file(path: pathlib.Path) -> typing.List[Instruction]:
     lines = [line for line in lines if not(line.isspace() or not line or line.rstrip().startswith("#"))]
     instructions = []
     for line in lines:
+        # parse each line
         instruction = parse_line(line)
+        # and if it contained an instruction, add it to our collection
         if instruction:
             instructions.append(instruction)
 
+    # returned parsed lines
     return instructions
