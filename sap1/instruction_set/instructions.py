@@ -2,7 +2,7 @@ from bitarray import bitarray
 
 from ._instruction import Instruction
 from .microcode import Microcode, NO_OP
-from .types import Bit, Pointer
+from .types import Bit, Pointer, nibble
 from .validators import validate_ptr
 
 FETCH_STATE = [
@@ -94,6 +94,7 @@ def sub(ptr: Pointer) -> Instruction:
 
     instruction = add(ptr=ptr, subtract=Bit(1))
     instruction.mnemonic = "SUB"
+    instruction.opcode = nibble(0b0010)
     return instruction
 
 
