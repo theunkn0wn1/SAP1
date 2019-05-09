@@ -24,7 +24,7 @@ class Microcode:
     BO: Bit = Bit(0)  # B register read enable
     OI: Bit = Bit(0)  # Output register enable
     CE: Bit = Bit(0)  # PC enable
-    OC: Bit = Bit(0)  # ???
+    OC: Bit = Bit(0)  # PC read enable (output)
     JMP: Bit = Bit(0)  # PC write enable (jump)
 
     def dump(self) -> bitarray:
