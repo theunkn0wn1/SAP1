@@ -36,7 +36,7 @@ def table_human_hex():
 
     """
     print(f"{'Word table':-^120}")
-    header = f"{'mnemonic': >12}| {'t': ^3}| {'address': ^9}| {'word': ^20} |"
+    header = f"{'mnemonic': >12}| {'t': ^3}| {'address': ^9}| {'EEPROM 0': ^10}| { 'EEPROM 1': ^10} |"
 
     print (header)
     for mnemonic, instruction in instructions.items():
@@ -44,7 +44,11 @@ def table_human_hex():
         for i, code in enumerate(instruction.states):
             addr = address(instruction, i)
             word = Word(address=addr, code=instruction.states[i])
-            line = f"{mnemonic: >12}| {i: ^3}| {addr.to01(): ^9}| {word.word.to01(): ^20} |"
+            word_as_bin = word.word.to01()
+            eeprom = [word_as_bin[:8], word_as_bin[8:]]
+
+            line = f"{mnemonic: >12}| {i: ^3}| {addr.to01(): ^9}| {eeprom[0]: ^10}| " \
+                f"{eeprom[1]: ^10} |"
 
             print(line)
 
