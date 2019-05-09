@@ -91,7 +91,7 @@ def sub(ptr: Pointer) -> Instruction:
         (Instruction) subtract instruction
     """
 
-    instruction = add(ptr, subtract=Bit(1))
+    instruction = add(ptr=ptr, subtract=Bit(1))
     instruction.mnemonic = "SUB"
     return instruction
 
