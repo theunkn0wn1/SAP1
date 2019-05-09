@@ -120,3 +120,28 @@ def jmp(ptr: Pointer) -> Instruction:
     ]
 
     return Instruction(mnemonic="JMP", opcode=opcode, states=states, operand=ptr)
+
+
+def out(ptr: Pointer) -> Instruction:
+    """
+    OUT instruction. pushes the A register to the output register
+
+    Args:
+        ptr(Pointer): unused.
+
+    Returns:
+        Instruction: instance of OUT instruction
+    """
+
+    opcode = bitarray('1110')
+    states = [
+        *FETCH_STATE,  # unpack the fetch state
+        # push A register to bus, enable output register update
+        Microcode(AO=Bit(1), OI=Bit(1)),
+        # no op
+        NO_OP,
+        # no op
+        NO_OP
+    ]
+
+    return Instruction(mnemonic="OUT", opcode=opcode, states=states, operand=ptr)

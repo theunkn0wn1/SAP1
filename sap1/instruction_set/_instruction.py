@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from bitarray import bitarray
 
 from .microcode import Microcode
-from .types import nibble
+from .types import nibble, MISSING
 
 
 @dataclass
@@ -33,4 +33,4 @@ class Instruction:
         Returns the machine code representation of the instruction
         """
         # append the operand to the opcode and BAM! machine code
-        return self.opcode + self.operand
+        return self.opcode + (self.operand if self.operand is not MISSING else nibble())
