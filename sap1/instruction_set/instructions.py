@@ -108,7 +108,7 @@ def jmp(ptr: Pointer) -> Instruction:
 
     """
 
-    opcode = bitarray('0011')
+    opcode = bitarray('0101')
     states = [
         *FETCH_STATE,  # unpack the fetch state
         # Push operand from IR to PC via JMP flag
