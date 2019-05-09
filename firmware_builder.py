@@ -6,20 +6,18 @@ from sap1.instruction_set.microcode import Microcode
 
 def table_dump():
     print(f"{'Truth Table':-^120}")
-    header = f"{'instruction': >12}| {'t': ^3}|"
+    header = f"{'instruction': >12}| {'opcode': ^6}| {'t': ^3}|"
     for key in vars(Microcode()):
         header += f"{key: ^5}|"
 
-    header += f"{'opcode': ^6}|"
     print(header)
     for mnemonic, instruction in instructions.items():
         print(f"{'.':.^120}")
         for i, code in enumerate(instruction.states):
-            line = f"{mnemonic: >12}| {i:0>3b}|"  # FIXME check what max T should be in binary
+            line = f"{mnemonic: >12}| {instruction.opcode.to01(): ^6}| {i:0>3b}|"  # FIXME check what max T should be in binary
             for bit in vars(code).values():
                 line += f"{bit: ^5}|"
 
-            line += f"{instruction.opcode.to01(): ^6}|"
             print(line)
 
 
