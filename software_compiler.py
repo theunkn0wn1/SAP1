@@ -14,7 +14,7 @@ if __name__ == '__main__':
     /\__/ / | | || |         _| |_ | \__/\ \_/ / |  | || |    _| |_| |____| |___| |\ \
     \____/\_| |_/\_|         \___/  \____/\___/\_|  |_/\_|    \___/\_____/\____/\_| \_|
     """)
-    print(f"{'  by Joshua (Theunkn0wn1) Salzedo  ':-^120}")
+    print(f"{'  SAP-1 compiler by Joshua (Theunkn0wn1) Salzedo  ':-^120}")
     parser = argparse.ArgumentParser(prog="SAP-1 software compiler")
     parser.add_argument("target", type=str)
     parser.add_argument("-v", "--verbose", action="store_true")
