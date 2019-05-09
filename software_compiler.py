@@ -34,12 +34,12 @@ if __name__ == '__main__':
         instructions = parse_file(path)
     except (AssertionError, TypeError, ValueError):
         print("\n\n\n")
-        print(f"!{'-':->118}!")
+        print(f"!!!{'-':->114}!!!")
         print("file parsing failed. check your file.")
-        print(f"!{'-':->118}!")
+        print(f"!!!{'-':->114}!!!")
         exit(2)
     # output block
-    print(f"{'parsed asm': >12}|{'machine code': <30}")
+    print(f"{'parsed asm': >12} | {'machine code': <30}")
 
     # the only instance its unbound is when the program exits due to an error, hence making
     # this code unreachable. suppress warning.
@@ -47,6 +47,6 @@ if __name__ == '__main__':
     for instruction in instructions:
         operand_value = int(instruction.operand.to01(), 2) if instruction.operand is not MISSING else 0
         print(
-            f"{instruction.mnemonic: >10} {operand_value:0>1X}|{instruction.machine_code.to01(): <30}")
+            f"{instruction.mnemonic: >10} {operand_value:0>1X} | {instruction.machine_code.to01(): <30}")
 
 print(f'{"  Done.  ":=^120}')
