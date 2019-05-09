@@ -1,4 +1,5 @@
 import argparse
+import io
 import pathlib
 import typing
 
@@ -30,14 +31,18 @@ def table_human_dump():
             print(line)
 
 
-def table_human_hex():
+def table_words() -> typing.List[typing.BinaryIO]:
     """
     dump instructions into a human_readable
     Returns:
 
     """
+
     print(f"{'Word table':-^120}")
     header = f"{'mnemonic': >12}| {'t': ^3}| {'address': ^9}| {'EEPROM 0': ^10}| {'EEPROM 1': ^10} |"
+    # create a bytesIO object to write into
+    ostreams = [io.BytesIO(), io.BytesIO()]
+
 
     print(header)
     for mnemonic, instruction in instructions.items():
@@ -52,6 +57,16 @@ def table_human_hex():
                 f"{eeprom[1]: ^10} |"
 
             print(line)
+            # convert addr to integer
+            raw_addr = int(addr.to01(), 2)
+            # seek to specified address
+            ostreams[0].seek(raw_addr)
+            ostreams[1].seek(raw_addr)
+            # write EEPROM data to ostreams
+            ostreams[0].write(word.word[0:8])
+            ostreams[1].write(word.word[8:])
+
+    return ostreams
 
 
 def table_hex() -> typing.Dict:
@@ -83,22 +98,30 @@ ______ _   _ _____ _    ______ ___________
     parser.add_argument("--word-table", action="store_true")
     parser.add_argument("--output", help="directory to output computed firmware binaries ",
                         default=...)
-    args = parser.parse_args()
+    args = parser.parse_known_args()[0]
     instructions = {'LDA': instruction_set.lda(ptr=0),
                     'ADD': instruction_set.add(ptr=0),
                     'SUB': instruction_set.sub(ptr=0),
                     'OUT': instruction_set.out(ptr=0),
                     'JMP': instruction_set.jmp(ptr=0),
                     'HLT': instruction_set.hlt(), }
+    if args.output is not ...:
+        path = pathlib.Path(args.output)
+        print(f"{'Output':-^120}")
+        if not path.exists() or not path.is_dir():
+            print(f"'{path.resolve()}' does not exist or does not point to a directory")
+            exit(1)
+
     if args.truth_table:
         table_human_dump()
 
     if args.word_table:
-        table_human_hex()
+        eeprom_a, eeprom_b = table_words()
 
-    if args.output is not ...:
-        path = pathlib.Path(args.output)
-        print(f"{'Output':-^120}")
-        print(f"using {path.absolute()} for output....")
+        print(f"using '{path.resolve()}'for output....")
+        if args.word_table:
+            print("dumping words to binary...")
+            (path / "eeprom_a.bin").write_bytes(eeprom_a.getvalue())
+            (path / "eeprom_b.bin").write_bytes(eeprom_b.getvalue())
 
     print(f"{'  Done.  ':=^120}")
