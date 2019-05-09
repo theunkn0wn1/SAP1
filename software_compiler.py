@@ -29,8 +29,16 @@ if __name__ == '__main__':
     if not path.is_file():
         print(f"directory specified, please give me just the ASM file you want me to compile.")
         exit(1)
-    instructions = parse_file(path)
-
+    # noinspection PyBroadException
+    try:
+        instructions = parse_file(path)
+    except Exception:
+        print("\n\n\n")
+        print(f"!{'-':->118}!")
+        print("file parsing failed. check your file.")
+        print(f"!{'-':->118}!")
+        exit(2)
+    # output block
     print(f"{'parsed asm': >12}|{'machine code': <30}")
     for instruction in instructions:
         operand_value = int(instruction.operand.to01(), 2) if instruction.operand is not MISSING else 0

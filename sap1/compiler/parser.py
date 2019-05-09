@@ -72,7 +72,8 @@ def parse_line(line: str) -> typing.Optional[Instruction]:
     LOG.debug(f"constructor := {constructor}")
     LOG.debug(f"operand:= {operand}")
     # cast the ptr to a nibble if the operand is not MISSING
-    ptr = nibble(int(operand)) if operand is not MISSING else MISSING
+    # ptr is expected to be a base 16 value
+    ptr = nibble(int(operand, 16 if len(operand) == 1 else 10)) if operand is not MISSING else MISSING
     LOG.debug(f"operand:= {operand}\tptr:={ptr}")
     return constructor(ptr=ptr)
 
@@ -93,11 +94,16 @@ def parse_file(path: pathlib.Path) -> typing.List[Instruction]:
     lines = data.split("\n")
     # filter out empty lines and lines that just contain whitespace
     # as well as those that start with comments
-    lines = [line for line in lines if not(line.isspace() or not line or line.rstrip().startswith("#"))]
+    lines = [line for line in lines if
+             not (line.isspace() or not line or line.rstrip().startswith("#"))]
     instructions = []
-    for line in lines:
+    for i, line in enumerate(lines):
         # parse each line
-        instruction = parse_line(line)
+        try:
+            instruction = parse_line(line)
+        except Exception as exc:
+            logging.exception(f"failed to process ASM line {i}.")
+            raise
         # and if it contained an instruction, add it to our collection
         if instruction:
             instructions.append(instruction)

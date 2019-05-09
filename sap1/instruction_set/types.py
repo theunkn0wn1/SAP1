@@ -16,7 +16,7 @@ def nibble(ptr: int = 0) -> bitarray:
     """
     return a 0 initialized nibble of bits (4 bits)
     """
-    assert 0xf >= ptr >= 0, "value out of range"
+    assert 0xf >= ptr >= 0, f"value {ptr} out of range"
     return bitarray(f"{bin(ptr)[2:]:{0}>4}")
 
 
