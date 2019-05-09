@@ -15,8 +15,8 @@ def table_dump():
         print(f"{'.':.^120}")
         for i, code in enumerate(instruction.states):
             line = f"{mnemonic: >12}| {instruction.opcode.to01(): ^6}| {i:0>3b}|"  # FIXME check what max T should be in binary
-            microcode_word = code.dump()
-            for bit in microcode_word.to01():
+            # dump the microcode word to binary for rendering
+            for bit in code.dump().to01():
                 line += f"{bit: ^5}|"
 
             print(line)
