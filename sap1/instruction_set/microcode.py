@@ -18,7 +18,7 @@ class Microcode:
     II: Bit = Bit(0)  # instruction register write enable
     AI: Bit = Bit(0)  # accumulator write enable
     AO: Bit = Bit(0)  # accumulator read enable
-    EpsilonOut: Bit = Bit(0)  # ALU read enable
+    EO: Bit = Bit(0)  # ALU read enable
     SUB: Bit = Bit(0)  # ALU subtract flag
     BI: Bit = Bit(0)  # B register write enable
     BO: Bit = Bit(0)  # B register read enable
@@ -44,7 +44,7 @@ class Microcode:
         buffer.append(self.AI)
 
         buffer.append(self.AO)
-        buffer.append(self.EpsilonOut)
+        buffer.append(self.EO)
         buffer.append(self.SUB)
         buffer.append(self.BI)
         buffer.append(self.BO)
