@@ -43,7 +43,6 @@ def table_words() -> typing.List[typing.BinaryIO]:
     # create a bytesIO object to write into
     ostreams = [io.BytesIO(), io.BytesIO()]
 
-
     print(header)
     for mnemonic, instruction in instructions.items():
         print(f"{'.':.^120}")
@@ -105,6 +104,8 @@ ______ _   _ _____ _    ______ ___________
                     'OUT': instruction_set.out(ptr=0),
                     'JMP': instruction_set.jmp(ptr=0),
                     'HLT': instruction_set.hlt(), }
+
+    path = None
     if args.output is not ...:
         path = pathlib.Path(args.output)
         print(f"{'Output':-^120}")
@@ -117,9 +118,8 @@ ______ _   _ _____ _    ______ ___________
 
     if args.word_table:
         eeprom_a, eeprom_b = table_words()
-
-        print(f"using '{path.resolve()}'for output....")
-        if args.word_table:
+        if path:
+            print(f"using '{path.resolve()}'for output....")
             print("dumping words to binary...")
             (path / "eeprom_a.bin").write_bytes(eeprom_a.getvalue())
             (path / "eeprom_b.bin").write_bytes(eeprom_b.getvalue())
