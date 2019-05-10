@@ -39,14 +39,14 @@ if __name__ == '__main__':
         print(f"!!!{'-':->114}!!!")
         exit(2)
     # output block
-    print(f"{'parsed asm': >12} | {'machine code': <30}")
+    print(f"{'parsed asm': >12} | {'addr'} | {'machine code': <30}")
 
     # the only instance its unbound is when the program exits due to an error, hence making
     # this code unreachable. suppress warning.
     # noinspection PyUnboundLocalVariable
-    for instruction in instructions:
+    for i, instruction in enumerate(instructions):
         operand_value = int(instruction.operand.to01(), 2) if instruction.operand is not MISSING else 0
         print(
-            f"{instruction.mnemonic: >10} {operand_value:0>1X} | {instruction.machine_code.to01(): <30}")
+            f"{instruction.mnemonic: >10} {operand_value:0>1X} | {i:0>4b} |{instruction.machine_code.to01(): <30}")
 
 print(f'{"  Done.  ":=^120}')
