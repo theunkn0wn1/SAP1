@@ -73,7 +73,7 @@ def add(ptr: Pointer, subtract: Bit = Bit(0)) -> Instruction:
         # load *operand from RAM into Register B. set subtract flag
         Microcode(RO=Bit(1), BI=Bit(1), SUB=subtract),
         # push ALU result into register A
-        Microcode(AI=Bit(1), EO=Bit(1))
+        Microcode(AI=Bit(1), EO=Bit(1), SUB=subtract)
     ]
     return Instruction(mnemonic="ADD", opcode=opcode, states=states, operand=ptr)
 
