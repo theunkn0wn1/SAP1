@@ -67,3 +67,6 @@ class Register(ClockedComponent, BusComponent):
 
     def __int__(self):
         return int(self.memory.to01(), 2)
+
+    def __index__(self):
+        return int(self)
