@@ -1,13 +1,17 @@
+import dataclasses
+
 from bitarray import bitarray
 
 from .component_bases import BusComponent
 from .register import Register
 
 
+@dataclasses.dataclass
 class InstructionRegister(Register):
     """
     Instruction register subclass
     """
+    name: str = 'I'  # IR is always the I register
 
     @property
     def opcode(self) -> bitarray:
