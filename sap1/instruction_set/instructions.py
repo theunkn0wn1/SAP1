@@ -2,13 +2,13 @@ from bitarray import bitarray
 
 from ._instruction import Instruction
 from .microcode import Microcode, NO_OP
-from sap1.types import Bit, Pointer, nibble
+from sap1.types import Bit, Pointer, nibble, HIGH, LOW
 from .validators import validate_ptr
 
 FETCH_STATE = [
-    Microcode(MI=Bit(1), OC=Bit(1)),
-    Microcode(CE=Bit(1)),
-    Microcode(RO=Bit(1), II=Bit(1)),
+    Microcode(MI=HIGH, OC=HIGH),
+    Microcode(CE=HIGH),
+    Microcode(RO=HIGH, II=HIGH),
 ]
 
 
@@ -26,8 +26,8 @@ def lda(ptr: Pointer) -> Instruction:
     opcode = bitarray('0000')
     states = [
         *FETCH_STATE,  # unpack the fetch state
-        Microcode(MI=Bit(1), IO=Bit(1)),  # load operand into MAR from IR
-        Microcode(RO=Bit(1), AI=Bit(1)),  # load *operand from RAM into Register A
+        Microcode(MI=HIGH, IO=HIGH),  # load operand into MAR from IR
+        Microcode(RO=HIGH, AI=HIGH),  # load *operand from RAM into Register A
         NO_OP  # t=6, no operation
     ]
     return Instruction(mnemonic="LDA", opcode=opcode, states=states, operand=ptr)
@@ -45,7 +45,7 @@ def hlt(**kwargs) -> Instruction:
     opcode = bitarray('1111')
     states = [
         *FETCH_STATE,  # unpack the fetch state
-        Microcode(HLT=Bit(1)),  # t=3, set halt high
+        Microcode(HLT=HIGH),  # t=3, set halt high
         NO_OP,  # t=5, no operation
         NO_OP  # t=6, no operation
     ]
@@ -54,7 +54,7 @@ def hlt(**kwargs) -> Instruction:
 
 
 @validate_ptr
-def add(ptr: Pointer, subtract: Bit = Bit(0)) -> Instruction:
+def add(ptr: Pointer, subtract: Bit = LOW) -> Instruction:
     """
     add the value *ptr and store the result in register A
 
@@ -69,11 +69,11 @@ def add(ptr: Pointer, subtract: Bit = Bit(0)) -> Instruction:
     states = [
         *FETCH_STATE,  # unpack the fetch state
         # load operand into MAR
-        Microcode(MI=Bit(1), IO=Bit(1)),
+        Microcode(MI=HIGH, IO=HIGH),
         # load *operand from RAM into Register B. set subtract flag
-        Microcode(RO=Bit(1), BI=Bit(1), SUB=subtract),
+        Microcode(RO=HIGH, BI=HIGH, SUB=subtract),
         # push ALU result into register A
-        Microcode(AI=Bit(1), EO=Bit(1), SUB=subtract)
+        Microcode(AI=HIGH, EO=HIGH, SUB=subtract)
     ]
     return Instruction(mnemonic="ADD", opcode=opcode, states=states, operand=ptr)
 
@@ -92,7 +92,7 @@ def sub(ptr: Pointer) -> Instruction:
         (Instruction) subtract instruction
     """
 
-    instruction = add(ptr=ptr, subtract=Bit(1))
+    instruction = add(ptr=ptr, subtract=HIGH)
     instruction.mnemonic = "SUB"
     instruction.opcode = nibble(0b0010)
     return instruction
@@ -114,7 +114,7 @@ def jmp(ptr: Pointer) -> Instruction:
     states = [
         *FETCH_STATE,  # unpack the fetch state
         # Push operand from IR to PC via JMP flag
-        Microcode(IO=Bit(1), JMP=Bit(1)),
+        Microcode(IO=HIGH, JMP=HIGH),
         # no op
         NO_OP,
         # no op
@@ -139,7 +139,7 @@ def out(ptr: Pointer) -> Instruction:
     states = [
         *FETCH_STATE,  # unpack the fetch state
         # push A register to bus, enable output register update
-        Microcode(AO=Bit(1), OI=Bit(1)),
+        Microcode(AO=HIGH, OI=HIGH),
         # no op
         NO_OP,
         # no op
