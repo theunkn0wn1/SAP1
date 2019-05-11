@@ -24,11 +24,11 @@ class Register(ClockedComponent, BusComponent):
         except AttributeError:
             LOG.exception(f"unable to locate relevant control signal, invalid name!")
 
-    def on_clock_high(self, microcode: Microcode):
-        LOG.debug(f"register got a high clock event with {microcode}")
+    def on_clock_high(self):
+        LOG.debug(f"register got a high clock event with {self.control_word}")
         # get our read flag from the control signal
-        read_flag = getattr(microcode, f"{self.name}I")
-        write_flag = getattr(microcode, f"{self.name}O")
+        read_flag = getattr(self.control_word, f"{self.name}I")
+        write_flag = getattr(self.control_word, f"{self.name}O")
 
         # check if we are read enabled
         if read_flag:
@@ -39,8 +39,8 @@ class Register(ClockedComponent, BusComponent):
 
         # TODO: what happens when both flags are set? race condition?
 
-    def on_clock_low(self, microcode: Microcode):
-        LOG.debug(f"register got a low clock event with {microcode}")
+    def on_clock_low(self):
+        LOG.debug(f"register got a low clock event with {self.control_word}")
 
     def read(self) -> bitarray:
         """

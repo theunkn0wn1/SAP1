@@ -18,7 +18,7 @@ class ClockedComponent(abc.ABC, Component):
         print("ClockedComponent.__init__ called")
         # append the clocked component to builtin registry
         self.__components.append(self)
-        super(ClockedComponent, self).__init__()
+        super().__init__()
 
     @abc.abstractmethod
     def on_clock_high(self, microcode: Microcode):
@@ -42,19 +42,16 @@ class ClockedComponent(abc.ABC, Component):
         """
 
     @classmethod
-    def _clock_tick(cls, microcode: Microcode):
+    def _clock_tick(cls):
         """
         Emit clock events to all Clocked Components
-
-        Args:
-            microcode(Microcode): control word to emit
 
         """
 
         # emit rising edge
         for component in cls.__components:
-            component.on_clock_high(microcode=microcode)
+            component.on_clock_high()
 
         # emit falling edge
         for component in cls.__components:
-            component.on_clock_low(microcode=microcode)
+            component.on_clock_low()
