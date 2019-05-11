@@ -7,7 +7,7 @@ from dataclasses import dataclass
 
 from sap1.instruction_set.microcode import Microcode
 
-LOG = logging.getLogger(f"mecha.{__name__}")
+LOG = logging.getLogger(f"sap1.{__name__}")
 
 
 @dataclass

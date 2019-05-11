@@ -7,7 +7,7 @@ from sap1.instruction_set.microcode import Microcode
 from .bus_component import BusComponent
 from .clocked_component import ClockedComponent
 
-LOG = logging.getLogger(f"mecha.{__name__}")
+LOG = logging.getLogger(f"sap1.{__name__}")
 
 
 @dataclass

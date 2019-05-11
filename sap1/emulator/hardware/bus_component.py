@@ -6,7 +6,7 @@ import typing
 
 from bitarray import bitarray
 
-LOG = logging.getLogger(f"mecha.{__name__}")
+LOG = logging.getLogger(f"sap1.{__name__}")
 
 
 @dataclasses.dataclass

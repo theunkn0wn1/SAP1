@@ -1,3 +1,3 @@
 import logging
 
-LOG = logging.getLogger(f"mecha.{__name__}")
+LOG = logging.getLogger(f"sap1.{__name__}")

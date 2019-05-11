@@ -7,7 +7,7 @@ import itertools
 import logging
 import pathlib
 
-LOG = logging.getLogger(f"mecha.{__name__}")
+LOG = logging.getLogger(f"sap1.{__name__}")
 
 to_int = functools.partial(int.from_bytes, byteorder="big")
 
