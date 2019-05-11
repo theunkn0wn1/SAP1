@@ -32,8 +32,8 @@ class ALU(BusComponent):
         a_value = int(self.A_REGISTER)
 
         computed = a_value + self.b_value
-
-        as_bits = bitarray(bin(computed)[2:])
+        as_bin = bin(computed)[2:]
+        as_bits = bitarray(f"{as_bin:0>8}")
 
         return as_bits[-8:]
 
