@@ -2,7 +2,7 @@ from bitarray import bitarray
 
 from ._instruction import Instruction
 from .microcode import Microcode, NO_OP
-from .types import Bit, Pointer, nibble
+from sap1.types import Bit, Pointer, nibble
 from .validators import validate_ptr
 
 FETCH_STATE = [

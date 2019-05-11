@@ -2,7 +2,7 @@ import argparse
 import pathlib
 
 from sap1.compiler.parser import parse_file
-from sap1.instruction_set.types import MISSING
+from sap1.types import MISSING
 
 if __name__ == '__main__':
     # used font = "doom"

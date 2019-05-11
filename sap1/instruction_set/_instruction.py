@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from bitarray import bitarray
 
 from .microcode import Microcode
-from .types import nibble, MISSING
+from sap1.types import nibble, MISSING
 
 
 @dataclass

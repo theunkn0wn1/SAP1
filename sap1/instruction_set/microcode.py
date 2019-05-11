@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from bitarray import bitarray
 
-from .types import Bit
+from sap1.types import Bit
 
 
 @dataclass(frozen=True)

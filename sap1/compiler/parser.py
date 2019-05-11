@@ -9,7 +9,7 @@ import typing
 
 from .. import instruction_set
 from ..instruction_set import Instruction
-from ..instruction_set.types import MISSING, nibble
+from sap1.types import MISSING, nibble
 
 LOG = logging.getLogger(f"sap1.{__name__}")
 

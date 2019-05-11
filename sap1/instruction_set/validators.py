@@ -2,7 +2,7 @@ import functools
 import logging
 import typing
 
-from .types import MISSING, nibble
+from sap1.types import MISSING, nibble
 
 LOG = logging.getLogger(f"sap1.{__name__}")
 
