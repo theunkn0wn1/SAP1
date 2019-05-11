@@ -30,7 +30,7 @@ class ClockedComponent(abc.ABC, Component):
             All rights reserved.
             see 3rd_party/pipsqueak3/LICENSE
         """
-        print("ClockedComponent.__init__ called")
+        LOG.debug("ClockedComponent.__init__ called")
         # append the clocked component to builtin registry
 
         # create a finalizer-based weak reference, tie the callback to our GC method
