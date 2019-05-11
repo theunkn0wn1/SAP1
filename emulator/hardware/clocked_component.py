@@ -40,3 +40,21 @@ class ClockedComponent(abc.ABC):
         Returns:
 
         """
+
+    @classmethod
+    def _clock_tick(cls, microcode: Microcode):
+        """
+        Emit clock events to all Clocked Components
+
+        Args:
+            microcode(Microcode): control word to emit
+
+        """
+
+        # emit rising edge
+        for component in cls.__components:
+            component.on_clock_high(microcode=microcode)
+
+        # emit falling edge
+        for component in cls.__components:
+            component.on_clock_low(microcode=microcode)
