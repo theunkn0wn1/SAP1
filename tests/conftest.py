@@ -7,12 +7,12 @@ from sap1.emulator.hardware.register import Register
 
 @pytest.fixture
 def a_register_fx() -> Register:
-    return Register('a')
+    return Register('A')
 
 
 @pytest.fixture
 def b_register_fx() -> Register:
-    return Register('b')
+    return Register('B')
 
 
 @pytest.fixture
