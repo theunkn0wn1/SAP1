@@ -1,5 +1,4 @@
 import typing
-
 # Bit = typing.NewType("Bit", int)
 from typing import Union
 
@@ -10,6 +9,8 @@ Binary one or zero
 """
 
 Bit = typing.NewType("Bit", int)
+LOW = 0
+HIGH = 1
 
 
 def nibble(ptr: int = 0) -> bitarray:
