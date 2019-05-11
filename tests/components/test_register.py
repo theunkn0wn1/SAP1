@@ -11,9 +11,9 @@ def test_read(a_register_fx, b_register_fx, value):
     """
     Tests the Register's ability to selectively read from the bus
     """
-    BusComponent.bus_state = bitarray(f"{value:0>b}")
-    with a_register_fx.signal(Microcode(AI=HIGH)):
-        a_register_fx._clock_tick()
+    with BusComponent.set_bus_state(bitarray(f"{value:0>8b}")):
+        with a_register_fx.signal(Microcode(AI=HIGH)):
+            a_register_fx._clock_tick()
 
     assert int(a_register_fx) == value, " A register did not contain expected value!"
     assert int(b_register_fx) == 0, "B register incorrectly read from the bus"

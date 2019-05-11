@@ -36,7 +36,6 @@ class ClockedComponent(abc.ABC, Component):
         # create a finalizer-based weak reference, tie the callback to our GC method
         # then append it to our storage object
         self.__components.append(weakref.finalize(self, self.__gc))
-        super().__init__()
 
     @abc.abstractmethod
     def on_clock_high(self):

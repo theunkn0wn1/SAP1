@@ -49,7 +49,7 @@ class Register(ClockedComponent, BusComponent):
         Returns:
             (bitarray) new state
         """
-        self.memory = self.bus_state
+        self.memory = BusComponent.bus_state.copy()
         return self.memory
 
     def write(self) -> None:
