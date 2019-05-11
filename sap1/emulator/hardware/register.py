@@ -4,8 +4,8 @@ from dataclasses import dataclass
 from bitarray import bitarray
 
 from sap1.instruction_set.microcode import Microcode
-from .bus_component import BusComponent
-from .clocked_component import ClockedComponent
+from .component_bases.bus_component import BusComponent
+from .component_bases.clocked_component import ClockedComponent
 
 LOG = logging.getLogger(f"sap1.{__name__}")
 
