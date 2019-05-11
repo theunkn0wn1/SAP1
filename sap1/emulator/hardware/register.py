@@ -49,6 +49,7 @@ class Register(ClockedComponent, BusComponent):
         Returns:
             (bitarray) new state
         """
+        # copy is needed here to decouple memory's internal state from the bus
         self.memory = BusComponent.bus_state.copy()
         return self.memory
 
@@ -56,8 +57,8 @@ class Register(ClockedComponent, BusComponent):
         """
         Write internal memory to bus
         """
-
-        BusComponent.bus_state = self.memory
+        # copy() is needed here to decouple the bus from the memory's internal state
+        BusComponent.bus_state = self.memory.copy()
 
     def reset(self) -> None:
         """
