@@ -47,7 +47,10 @@ class ClockedComponent(abc.ABC, Component):
         Emit clock events to all Clocked Components
 
         """
-
+        if cls.control_word.HLT:
+            # clock is halted, bail out
+            LOG.debug("clock is halted, will not emit clock tick.")
+            return
         # emit rising edge
         for component in cls.__components:
             component.on_clock_high()
