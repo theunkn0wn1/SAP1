@@ -27,8 +27,16 @@ class Register(ClockedComponent, BusComponent):
         LOG.debug(f"register got a high clock event with {microcode}")
         # get our read flag from the control signal
         read_flag = getattr(microcode, f"{self.name}I")
+        write_flag = getattr(microcode, f"{self.name}O")
+
+        # check if we are read enabled
         if read_flag:
             self.read()
+        # check if we are write enabled
+        if write_flag:
+            self.write()
+
+        # TODO: what happens when both flags are set? race condition?
 
     def on_clock_low(self, microcode: Microcode):
         LOG.debug(f"register got a low clock event with {microcode}")
