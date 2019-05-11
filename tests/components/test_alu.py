@@ -46,7 +46,9 @@ def test_subtract(a_register_fx, b_register_fx, alu_fx, a, b, expected):
 
     with a_register_fx.signal(Microcode(SUB=Bit(HIGH))):
         result = alu_fx.value
+        result_b = int(alu_fx)
 
     result_as_int = int(result.to01(), 2)
 
     assert result_as_int == expected, "ALU did not return correct value"
+    assert result_b == expected and result_b == result_as_int, "int(ALU) returns an inconsistent value!"
