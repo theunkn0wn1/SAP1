@@ -14,7 +14,7 @@ LOG = logging.getLogger(f"sap1.{__name__}")
 
 @dataclass
 class ClockedComponent(abc.ABC, Component):
-    __components: typing.ClassVar[typing.List[ClockedComponent]] = []
+    __components: typing.ClassVar[typing.List[weakref.ref]] = []
 
     def __post_init__(self):
         """
@@ -70,12 +70,22 @@ class ClockedComponent(abc.ABC, Component):
             LOG.debug("clock is halted, will not emit clock tick.")
             return
         # emit rising edge
-        for component in cls.__components:
-            component.on_clock_high()
+        for reference in cls.__components:
+            # check if the reference is still alive
+            if reference.alive:
+                # and if it is, resolve the hard reference
+                component: ClockedComponent = reference.peek()[0]
+                # and invoke the method
+                component.on_clock_high()
 
         # emit falling edge
-        for component in cls.__components:
-            component.on_clock_low()
+        for reference in cls.__components:
+            # check if the reference is still alive
+            if reference.alive:
+                # and if it is, resolve the hard reference
+                component: ClockedComponent = reference.peek()[0]
+                # and invoke the method
+                component.on_clock_low()
 
     @classmethod
     def __gc(cls) -> int:
