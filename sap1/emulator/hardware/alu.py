@@ -37,6 +37,12 @@ class ALU(BusComponent):
 
         return as_bits[-8:]
 
+    def __int__(self):
+        return int(self.value.to01(), 2)
+
+    def __index__(self):
+        return int(self)
+
     @property
     def b_value(self) -> int:
         """
