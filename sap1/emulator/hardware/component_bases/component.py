@@ -21,8 +21,8 @@ class Component:
             word(Microcode): control word to use on entry
 
         """
-        cls.control_word = word
+        Component.control_word = word
 
         yield
 
-        cls.control_word = NO_OP
+        Component.control_word = NO_OP
