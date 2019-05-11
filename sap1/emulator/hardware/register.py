@@ -64,3 +64,6 @@ class Register(ClockedComponent, BusComponent):
         Reset internal memory state to zero
         """
         self.memory.setall(0)
+
+    def __int__(self):
+        return int(self.memory.to01(), 2)
