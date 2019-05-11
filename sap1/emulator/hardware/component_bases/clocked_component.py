@@ -3,10 +3,12 @@ from __future__ import annotations
 import abc
 import logging
 import typing
+import weakref
 from dataclasses import dataclass
 
 from sap1.instruction_set.microcode import Microcode
-from .component import  Component
+from .component import Component
+
 LOG = logging.getLogger(f"sap1.{__name__}")
 
 
@@ -15,9 +17,25 @@ class ClockedComponent(abc.ABC, Component):
     __components: typing.ClassVar[typing.List[ClockedComponent]] = []
 
     def __post_init__(self):
+        """
+
+        Post-initialization routine
+
+        Uses code adapted from https://github.com/fuelrats/pipsqueak3 see attribution.
+
+        Attribution:
+            BSD 3-Clause License
+
+            Copyright (c) 2018, The Fuel Rats Mischief
+            All rights reserved.
+            see 3rd_party/pipsqueak3/LICENSE
+        """
         print("ClockedComponent.__init__ called")
         # append the clocked component to builtin registry
-        self.__components.append(self)
+
+        # create a finalizer-based weak reference, tie the callback to our GC method
+        # then append it to our storage object
+        self.__components.append(weakref.finalize(self, self.__gc))
         super().__init__()
 
     @abc.abstractmethod
@@ -58,3 +76,30 @@ class ClockedComponent(abc.ABC, Component):
         # emit falling edge
         for component in cls.__components:
             component.on_clock_low()
+
+    @classmethod
+    def __gc(cls) -> int:
+        """
+        Garbage collect dead references. called when a weak reference dies.
+
+        Returns:
+            number of references collected
+
+
+        Attribution:
+            BSD 3-Clause License
+
+            Copyright (c) 2018, The Fuel Rats Mischief
+            All rights reserved.
+            see 3rd_party/pipsqueak3/LICENSE
+
+        """
+        # calculate which references are dead
+        to_delete = {reference for reference in cls.__components if not reference.alive}
+
+        culled = len(to_delete)
+        # and cull them
+        for reference in to_delete:
+            cls.__components.remove(reference)
+
+        return culled
