@@ -6,9 +6,11 @@ verify_ssl = true
 [dev-packages]
 ipython = "*"
 pytest = "*"
+coverage = "*"
 
 [packages]
 bitarray = "*"
+
 
 [requires]
 python_version = "3.7"
