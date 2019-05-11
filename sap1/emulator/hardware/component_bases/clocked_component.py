@@ -6,12 +6,12 @@ import typing
 from dataclasses import dataclass
 
 from sap1.instruction_set.microcode import Microcode
-
+from .component import  Component
 LOG = logging.getLogger(f"sap1.{__name__}")
 
 
 @dataclass
-class ClockedComponent(abc.ABC):
+class ClockedComponent(abc.ABC, Component):
     __components: typing.ClassVar[typing.List[ClockedComponent]] = []
 
     def __post_init__(self):

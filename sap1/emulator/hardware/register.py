@@ -13,11 +13,12 @@ LOG = logging.getLogger(f"sap1.{__name__}")
 @dataclass
 class Register(ClockedComponent, BusComponent):
     name: str
-    memory: bitarray = bitarray('00000000')
+    memory: bitarray = bitarray(8)
 
     def __post_init__(self):
         # emit event to superclass
         super().__post_init__()
+        self.reset()
         try:
             getattr(Microcode(), f"{self.name}I")
         except AttributeError:
@@ -57,3 +58,9 @@ class Register(ClockedComponent, BusComponent):
         """
 
         BusComponent.bus_state = self.memory
+
+    def reset(self) -> None:
+        """
+        Reset internal memory state to zero
+        """
+        self.memory.setall(0)
