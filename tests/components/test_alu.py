@@ -51,4 +51,5 @@ def test_subtract(a_register_fx, b_register_fx, alu_fx, a, b, expected):
     result_as_int = int(result.to01(), 2)
 
     assert result_as_int == expected, "ALU did not return correct value"
-    assert result_b == expected and result_b == result_as_int, "int(ALU) returns an inconsistent value!"
+    assert (result_b == expected and
+            result_b == result_as_int), "int(ALU) returns an inconsistent value!"
