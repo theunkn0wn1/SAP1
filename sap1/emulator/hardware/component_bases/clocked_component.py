@@ -21,7 +21,7 @@ class ClockedComponent(abc.ABC, Component):
         super().__init__()
 
     @abc.abstractmethod
-    def on_clock_high(self, microcode: Microcode):
+    def on_clock_high(self):
         """
         Fired on the clock's rising edge
 
@@ -30,7 +30,7 @@ class ClockedComponent(abc.ABC, Component):
         """
 
     @abc.abstractmethod
-    def on_clock_low(self, microcode: Microcode):
+    def on_clock_low(self):
         """
         Fired on the clock's falling edge
 
