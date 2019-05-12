@@ -36,5 +36,7 @@ class ControlUnit(ClockedComponent):
     def word(self) -> Microcode:
         word_a = f"{EEPROM_A[self.address]:0>8b}"
         word_b = f"{EEPROM_B[self.address]:0>8b}"
-        return Microcode(*word_a, *word_b)
+        int_a = [int(v) for v in word_a]
+        int_b =  [int(v) for v in word_b]
+        return Microcode(*int_a, *int_b)
 # lets build the address
