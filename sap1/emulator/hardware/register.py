@@ -11,7 +11,7 @@ LOG = logging.getLogger(f"sap1.{__name__}")
 
 
 @dataclass
-class Register(ClockedComponent, BusComponent):
+class RegisterReadOnly(ClockedComponent, BusComponent):
     name: str
     memory: bitarray = bitarray(8)
 
@@ -28,14 +28,11 @@ class Register(ClockedComponent, BusComponent):
         LOG.debug(f"register got a high clock event with {self.control_word}")
         # get our read flag from the control signal
         read_flag = getattr(self.control_word, f"{self.name}I")
-        write_flag = getattr(self.control_word, f"{self.name}O")
 
         # check if we are read enabled
         if read_flag:
             self.read()
         # check if we are write enabled
-        if write_flag:
-            self.write()
 
         # TODO: what happens when both flags are set? race condition?
 
@@ -53,13 +50,6 @@ class Register(ClockedComponent, BusComponent):
         self.memory = BusComponent.bus_state.copy()
         return self.memory
 
-    def write(self) -> None:
-        """
-        Write internal memory to bus
-        """
-        # copy() is needed here to decouple the bus from the memory's internal state
-        BusComponent.bus_state = self.memory.copy()
-
     def reset(self) -> None:
         """
         Reset internal memory state to zero
@@ -71,3 +61,23 @@ class Register(ClockedComponent, BusComponent):
 
     def __index__(self):
         return int(self)
+
+
+class Register(RegisterReadOnly):
+    """
+    Read/write register
+    """
+
+    def __post_init__(self):
+        write_flag = getattr(self.control_word, f"{self.name}O")
+
+        if write_flag:
+            self.write()
+        super().__post_init__()
+
+    def write(self) -> None:
+        """
+        Write internal memory to bus
+        """
+        # copy() is needed here to decouple the bus from the memory's internal state
+        BusComponent.bus_state = self.memory.copy()
