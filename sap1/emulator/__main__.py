@@ -17,13 +17,14 @@ __author__ = "Joshua (Theunkn0wn1) Salzedo"
 
 
 def load_memory_from_buffer(buffer: str):
-    lines = buffer.split("\n")
+    lines = buffer.rstrip().split("\n")
 
     assert len(lines) == 16, f"memory is of an invalid size( {len(lines)}, should be exactly 16 )  "
 
     for i, line in enumerate(lines):
         mar.memory = bitarray(f"{i:0>4b}")
         ram.value = bitarray(line)
+        assert len(ram.value) == 8, "invalid memory word!"
         print(ram.value)
 
 
@@ -57,12 +58,12 @@ if __name__ == '__main__':
     with AutomaticSpinner("pre flight checks passed. initializing...."):
         print("initializing components...")
 
-        register_a = hardware.Register('A')
-        register_b = hardware.Register('B')
         instruction_register = hardware.InstructionRegister()
         mar = hardware.Mar()
         control = hardware.ControlUnit(instruction_register)
         ram = hardware.Ram(mar)
+        register_a = hardware.Register('A')
+        register_b = hardware.Register('B')
         output_register = RegisterReadOnly(name='O')
 
         print("OK.\nLoading memory profile from disk....")
@@ -82,4 +83,15 @@ if __name__ == '__main__':
             while (control.word.HLT == Bit(LOW)) and (control.word.OI == Bit(LOW)):
                 control._clock_tick()
             print(f"result:= {output_register.memory}")
-            print(f"control word:= {control}")
+            print(f"control word:= {control.word}")
+    else:
+        print("running in interactive mode... press <enter> to step forward")
+        while (control.word.HLT == Bit(LOW)) and (control.word.OI == Bit(LOW)):
+            print(f"{'stepping...':-^120}")
+            print(f"timestep: {control.time_step} \t program_counter {progra}")
+            print(f"opcode: {instruction_register.opcode}\toperand{instruction_register.operand}")
+            print(f"control word: {control.word} \t instruction_register {instruction_register}")
+            print(f"mar: {mar}\tram value:{ram.value}")
+            print(f"a_register: {register_a.memory}\t b_register: {register_b.memory}")
+            input("press enter to step forward")
+            control._clock_tick()

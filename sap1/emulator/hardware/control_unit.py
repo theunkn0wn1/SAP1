@@ -4,6 +4,7 @@ import logging
 
 from bitarray import bitarray
 
+from sap1.emulator.hardware.component_bases import Component
 from sap1.firmware import EEPROM_A, EEPROM_B
 from sap1.instruction_set.microcode import Microcode
 from .component_bases import ClockedComponent
@@ -23,13 +24,14 @@ class ControlUnit(ClockedComponent):
 
     def on_clock_high(self):
         self.time_step = next(self._counter)
+        Component.control_word = self.word
 
     def on_clock_low(self):
         pass
 
     @property
     def address(self):
-        addr: bitarray = self.instruction_register.opcode + bitarray(f"{self.time_step:0>4b}")
+        addr: bitarray = self.instruction_register.opcode + bitarray(f"{self.time_step:0>3b}")
         return int(addr.to01(), 2)
 
     @property

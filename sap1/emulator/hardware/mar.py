@@ -15,4 +15,5 @@ class Mar(RegisterReadOnly):
 
     def read(self) -> bitarray:
         new_value_arr: bitarray = self.bus_state[4:]
+        assert len(new_value_arr) == 4, "Bus is in an invalid state!"
         self.memory = new_value_arr
