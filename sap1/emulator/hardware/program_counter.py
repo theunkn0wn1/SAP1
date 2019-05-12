@@ -31,6 +31,9 @@ class ProgramCounter(ClockedComponent, BusComponent):
             new_count = int(new_value_arr.to01(), 2)
             self.jump(new_count)
 
+        if self.control_word.OC:
+            BusComponent.bus_state = bitarray('0000') + bitarray(f'{self.count:0>4b}')
+
     def on_clock_low(self):
         pass
 
