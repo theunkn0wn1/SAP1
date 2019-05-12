@@ -5,19 +5,22 @@ from asciimatics.scene import Scene
 from asciimatics.screen import ManagedScreen
 from asciimatics.widgets import Frame, Layout, Button, Label
 
+from ._runtime import Computer
+
 
 def run_menu_system():
     banner = FigletText("SAP-1 Emulator", font="doom")
+    computer = Computer()
     with ManagedScreen() as screen:
         scenes = [
             Scene([
                 Print(screen, banner, 0, colour=screen.COLOUR_GREEN, attr=screen.A_BOLD),
-                Main(screen, 35, 110, y=10),
+                Main(computer, screen, 35, 110, y=10),
             ], name="Main"),
 
             Scene([
                 Print(screen, banner, 0, colour=screen.COLOUR_GREEN, attr=screen.A_BOLD),
-                HardwareView(screen, 35, 100, y=10),
+                HardwareView(computer, screen, 35, 100, y=10),
             ],
                 name="HardwareView")
         ]
@@ -28,12 +31,13 @@ def run_menu_system():
 
 class Main(Frame):
 
-    def __init__(self, screen, height, width, data=None, on_load=None, has_border=True,
+    def __init__(self, computer: Computer, screen, height, width, data=None, on_load=None,
+                 has_border=True,
                  hover_focus=False, name=None, title=None, x=None, y=None, has_shadow=False,
                  reduce_cpu=False, is_modal=False, can_scroll=True):
         super().__init__(screen, height, width, data, on_load, has_border, hover_focus, name, title, x,
                          y, has_shadow, reduce_cpu, is_modal, can_scroll)
-
+        self._computer = computer
         # Create the form for displaying the list of contacts.
         layout = Layout([6], fill_frame=True)
         self.add_layout(layout)
@@ -49,6 +53,10 @@ class Main(Frame):
         layout2.add_widget(Button("QUIT", self._ok), 0)
         layout2.add_widget(Button("Cancel", self._cancel), 3)
         self.fix()
+
+    @property
+    def computer(self) -> Computer:
+        return self._computer
 
     def reset(self):
         # Do standard reset to clear out form, then populate with new data.
@@ -71,20 +79,33 @@ class Main(Frame):
 
 class MemoryView(Frame):
 
-    def __init__(self, screen, height, width, data=None, on_load=None, has_border=True,
+    def __init__(self, computer: Computer, screen, height, width, data=None, on_load=None,
+                 has_border=True,
                  hover_focus=False, name=None, title=None, x=None, y=None, has_shadow=False,
                  reduce_cpu=False, is_modal=False, can_scroll=True):
         super().__init__(screen, height, width, data, on_load, has_border, hover_focus, name, title, x,
                          y, has_shadow, reduce_cpu, is_modal, can_scroll)
+
+        self._computer = computer
         self.fix()
+
+        @property
+        def computer(self) -> Computer:
+            return self._computer
 
 
 class HardwareView(Frame):
-    def __init__(self, screen, height, width, data=None, on_load=None, has_border=True,
+    def __init__(self, computer: Computer, screen, height, width, data=None, on_load=None,
+                 has_border=True,
                  hover_focus=False, name=None, title=None, x=None, y=None, has_shadow=False,
                  reduce_cpu=False, is_modal=False, can_scroll=True):
         super().__init__(screen, height, width, data, on_load, has_border, hover_focus, name, title, x,
                          y, has_shadow, reduce_cpu, is_modal, can_scroll)
+        self._computer = computer
+
+        @property
+        def computer(self) -> Computer:
+            return self._computer
 
         layout = Layout([2])
         self.add_layout(layout)
@@ -96,7 +117,3 @@ class HardwareView(Frame):
         raise NextScene("Main")
 
     ...
-
-
-if __name__ == "__main__":
-    run_memu_system()

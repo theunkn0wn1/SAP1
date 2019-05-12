@@ -5,6 +5,7 @@ import pathlib
 from humanfriendly.cli import warning
 
 from sap1.emulator._runtime import runtime
+from ._screens import run_menu_system
 
 LOG = logging.getLogger(f"sap1.{__name__}")
 
@@ -30,6 +31,7 @@ if __name__ == '__main__':
     parser.add_argument("--pause-on-out", "-pauseOut", help="pause after OUT directives",
                         action="store_true")
 
+    parser.add_argument("--legacy-shell", help="use the legacy shell (bad)", action="store_true")
     namespace = parser.parse_args()
 
     memory_target = pathlib.Path(namespace.memory)
@@ -41,4 +43,7 @@ if __name__ == '__main__':
         warning(f"{memory_target.resolve()} is not a file. Stop.")
         exit(1)
 
-    runtime(memory_target, namespace)
+    if namespace.legacy_shell:
+        runtime(memory_target, namespace)
+    else:
+        run_menu_system()
