@@ -62,3 +62,10 @@ def test_no_op(program_counter_fx):
 
     # nothing should happen here, we should still be zero
     assert program_counter_fx.count == 0, "clock changed during a no-op!"
+
+
+def test_reset(program_counter_fx):
+    program_counter_fx.jump(0b1100)
+
+    program_counter_fx.reset()
+    assert program_counter_fx.count == 0, "failed to reset PC"

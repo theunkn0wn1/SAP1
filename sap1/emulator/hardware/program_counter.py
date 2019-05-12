@@ -20,7 +20,6 @@ class ProgramCounter(ClockedComponent, BusComponent):
 
         self.count = next(itertools.dropwhile(lambda x: (x != target), self._counter))
 
-
     def on_clock_high(self):
         if self.control_word.CE:
             # if clock is enabled then increment internal count
@@ -35,3 +34,5 @@ class ProgramCounter(ClockedComponent, BusComponent):
     def on_clock_low(self):
         pass
 
+    def reset(self):
+        self.jump(0)
