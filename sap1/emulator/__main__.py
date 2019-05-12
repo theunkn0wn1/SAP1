@@ -2,6 +2,7 @@ import argparse
 import logging
 import pathlib
 
+from bitarray import bitarray
 from humanfriendly import AutomaticSpinner
 from humanfriendly.cli import warning
 
@@ -11,6 +12,17 @@ LOG = logging.getLogger(f"sap1.{__name__}")
 
 __version__ = "0.1.0"
 __author__ = "Joshua (Theunkn0wn1) Salzedo"
+
+
+def load_memory_from_buffer(buffer: str):
+    lines = buffer.split("\n")
+
+    assert len(lines) == 16, f"memory is of an invalid size( {len(lines)}, should be exactly 16 )  "
+
+    for i, line in enumerate(lines):
+        mar.memory = bitarray(f"{i:0>4b}")
+        ram.value = bitarray(line)
+
 
 if __name__ == '__main__':
     print(f"{'=':=^120}")
@@ -47,4 +59,10 @@ if __name__ == '__main__':
         mar = hardware.Mar()
         control = hardware.ControlUnit(instruction_register)
         ram = hardware.Ram(mar)
-        print("OK.\nLoading memory profile....")
+        print("OK.\nLoading memory profile from disk....")
+        raw_memory = memory_target.read_text()
+        print("OK.")
+        print("Applying memory profile....")
+        load_memory_from_buffer(raw_memory)
+        print("OK.")
+    print(f"{' Ready. ':-^120}")
