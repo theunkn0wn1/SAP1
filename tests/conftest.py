@@ -4,6 +4,7 @@ from sap1.emulator.hardware.alu import ALU
 from sap1.emulator.hardware.component_bases import BusComponent
 from sap1.emulator.hardware.instruction_register import InstructionRegister
 from sap1.emulator.hardware.mar import Mar
+from sap1.emulator.hardware.memory import Ram
 from sap1.emulator.hardware.program_counter import ProgramCounter
 from sap1.emulator.hardware.register import Register
 
@@ -36,6 +37,11 @@ def program_counter_fx():
 @pytest.fixture
 def mar_fx() -> Mar:
     return Mar()
+
+
+@pytest.fixture
+def ram_fx(mar_fx) -> Ram:
+    return Ram(mar_fx)
 
 
 @pytest.fixture(autouse=True)
