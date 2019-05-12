@@ -10,14 +10,14 @@ def test_increment(program_counter_fx):
     Verifies increment nature of the program counter
     """
 
-    program_counter_fx.count = 0
+    program_counter_fx.jump(0)
     # increment clock
     with program_counter_fx.signal(Microcode(CE=Bit(HIGH))):
         program_counter_fx._clock_tick()
 
     assert program_counter_fx.count == 1, "program counter failed to increment"
     # increment clock
-    program_counter_fx.count = 14
+    program_counter_fx.jump(14)
     # increment clock
     with program_counter_fx.signal(Microcode(CE=Bit(HIGH))):
         program_counter_fx._clock_tick()

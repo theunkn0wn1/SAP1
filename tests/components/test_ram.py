@@ -4,7 +4,7 @@ from sap1.instruction_set.microcode import Microcode
 from sap1.types import Bit, HIGH
 
 
-def test_access(ram_fx, mar_fx):
+def test_read(ram_fx, mar_fx):
     """
     Tests Memory's read behavior\
     """
@@ -18,7 +18,7 @@ def test_access(ram_fx, mar_fx):
     assert ram_fx.value == expected
 
 
-def test_read(ram_fx, mar_fx):
+def test_write(ram_fx, mar_fx):
     """ test write behavior """
 
     expected = bitarray('11011101')
