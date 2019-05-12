@@ -53,7 +53,7 @@ if __name__ == '__main__':
         # this code unreachable. suppress warning.
         # noinspection PyUnboundLocalVariable
         # buffer output to be exactly 16 lines in length
-        while len(instructions) < 15:
+        while len(instructions) < 16:
             instructions.append(lda(ptr=0))
         # the only instance its unbound is when the program exits due to an error, hence making
         # this code unreachable. suppress warning.
