@@ -6,6 +6,8 @@ from bitarray import bitarray
 from humanfriendly import AutomaticSpinner
 from humanfriendly.cli import warning
 
+from sap1.emulator.hardware.register import RegisterReadOnly
+from sap1.types import Bit, LOW
 from . import hardware
 
 LOG = logging.getLogger(f"sap1.{__name__}")
@@ -22,6 +24,7 @@ def load_memory_from_buffer(buffer: str):
     for i, line in enumerate(lines):
         mar.memory = bitarray(f"{i:0>4b}")
         ram.value = bitarray(line)
+        print(ram.value)
 
 
 if __name__ == '__main__':
@@ -53,16 +56,30 @@ if __name__ == '__main__':
 
     with AutomaticSpinner("pre flight checks passed. initializing...."):
         print("initializing components...")
+
         register_a = hardware.Register('A')
         register_b = hardware.Register('B')
         instruction_register = hardware.InstructionRegister()
         mar = hardware.Mar()
         control = hardware.ControlUnit(instruction_register)
         ram = hardware.Ram(mar)
+        output_register = RegisterReadOnly(name='O')
+
         print("OK.\nLoading memory profile from disk....")
         raw_memory = memory_target.read_text()
         print("OK.")
+
         print("Applying memory profile....")
         load_memory_from_buffer(raw_memory)
+
         print("OK.")
     print(f"{' Ready. ':-^120}")
+    if namespace.non_interactive:
+        print("running in non-interactive mode...")
+
+        with AutomaticSpinner("executing program..."):
+            # run til we reach a HALT or a OUT instruction
+            while (control.word.HLT == Bit(LOW)) and (control.word.OI == Bit(LOW)):
+                control._clock_tick()
+            print(f"result:= {output_register.memory}")
+            print(f"control word:= {control}")
