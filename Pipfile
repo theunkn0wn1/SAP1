@@ -10,7 +10,7 @@ coverage = "*"
 
 [packages]
 bitarray = "*"
-
+humanfriendly = "*"
 
 [requires]
 python_version = "3.7"
