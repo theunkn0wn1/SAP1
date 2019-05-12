@@ -52,7 +52,7 @@ def table_words() -> typing.List[typing.BinaryIO]:
             word_as_bin = word.word.to01()
             eeprom = [word_as_bin[:8], word_as_bin[8:]]
 
-            line = f"{mnemonic: >12}| {i: ^3}| {(int(addr.to01(), 2)): ^9X}| {eeprom[0]: ^10}| " \
+            line = f"{mnemonic: >12}| {i: ^3}| {(int(addr.to01(), 2)):0>8b}| {eeprom[0]: ^10}| " \
                 f"{eeprom[1]: ^10} |"
 
             print(line)
