@@ -7,6 +7,12 @@ from asciimatics.widgets import Frame, Layout, Button, Label
 
 from ._runtime import Computer
 
+ADDRESS_COL = 0
+RAM_VAL_COL = 1
+COMPONENT_LABEL_COL = 2
+COMPONENT_VAL_COL = 3
+ALLIGN = "^"
+
 
 def run_menu_system():
     banner = FigletText("SAP-1 Emulator", font="doom")
@@ -87,19 +93,29 @@ class HardwareView(Frame):
                          y, has_shadow, reduce_cpu, is_modal, can_scroll)
         self._computer = computer
 
-        layout = Layout([1, 3, 2, 4])
+        layout = Layout([RAM_VAL_COL, COMPONENT_VAL_COL, COMPONENT_LABEL_COL, COMPONENT_VAL_COL])
         self.add_layout(layout)
-        layout.add_widget(Label("Address", align="^"), 0)
-        layout.add_widget(Label("Value", align="^"), 1)
-        layout.add_widget(Label("Component", align="^"), 2)
-        layout.add_widget(Label("Value", align='^'), 3)
+        layout.add_widget(Label("Address", align=ALLIGN), ADDRESS_COL)
+        layout.add_widget(Label("Value", align=ALLIGN), RAM_VAL_COL)
+        layout.add_widget(Label("Component", align=ALLIGN), COMPONENT_LABEL_COL)
+        layout.add_widget(Label("Value", align=ALLIGN), COMPONENT_VAL_COL)
 
         for key in self.computer.ram.memory:
-            layout.add_widget(Label(key, align='^'), 0)
-            layout.add_widget(Label(self.computer.ram.memory[key], align='^'), 1)
+            self.add_label(layout, key, ADDRESS_COL)
+            self.add_label(layout, self.computer.ram.memory[key], RAM_VAL_COL)
+
+        self.add_label(layout, "A Register", COMPONENT_LABEL_COL)
+        self.add_label(layout, self.computer.register_a.memory, COMPONENT_VAL_COL)
+
+        self.add_label(layout, "B Register", COMPONENT_LABEL_COL)
+        self.add_label(layout, self.computer.register_b.memory, COMPONENT_VAL_COL)
+
         layout.add_widget(Button("go back", on_click=self.on_click))
 
         self.fix()
+
+    def add_label(self, layout, value, col):
+        layout.add_widget(Label(value, align=ALLIGN), col)
 
     @property
     def computer(self) -> Computer:
