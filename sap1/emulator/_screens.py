@@ -14,9 +14,8 @@ COMPONENT_VAL_COL = 3
 ALLIGN = "^"
 
 
-def run_menu_system():
+def run_menu_system(computer: Computer):
     banner = FigletText("SAP-1 Emulator", font="doom")
-    computer = Computer()
     with ManagedScreen() as screen:
         banner_frame = Print(screen, banner, 0, colour=screen.COLOUR_GREEN, attr=screen.A_BOLD)
         scenes = [
@@ -27,7 +26,7 @@ def run_menu_system():
 
             Scene([
                 banner_frame,
-                HardwareView(computer, screen, 35, 100, y=10),
+                HardwareView(computer, screen, 35, 110, y=10),
             ],
                 name="HardwareView"),
         ]
@@ -128,10 +127,13 @@ class HardwareView(Frame):
 
         self.add_label(component_layout, "IR operand", COMPONENT_LABEL_COL)
         self.add_label(component_layout, self.computer.instruction_register.operand, COMPONENT_VAL_COL)
-        layout2 = Layout([1, 1])
+
+        layout2 = Layout([10])
         self.add_layout(layout2)
         layout2.add_widget(Divider(), 0)
-        layout2.add_widget(Divider(), 1)
+
+        self.add_label(layout2, "Control Word", 0)
+        self.add_label(layout2, self.computer.program_counter.control_word, 0)
 
         layout2.add_widget(Button("go back", on_click=self.on_click))
 
@@ -148,3 +150,9 @@ class HardwareView(Frame):
         raise NextScene("Main")
 
     ...
+
+
+class LoadMemory(Frame):
+    """
+    Memory loading
+    """

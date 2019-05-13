@@ -4,7 +4,7 @@ import pathlib
 
 from humanfriendly.cli import warning
 
-from sap1.emulator._runtime import runtime
+from sap1.emulator._runtime import runtime, Computer
 from ._screens import run_menu_system
 
 LOG = logging.getLogger(f"sap1.{__name__}")
@@ -46,4 +46,4 @@ if __name__ == '__main__':
     if namespace.legacy_shell:
         runtime(memory_target, namespace)
     else:
-        run_menu_system()
+        run_menu_system(Computer())
