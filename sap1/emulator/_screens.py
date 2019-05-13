@@ -12,17 +12,18 @@ def run_menu_system():
     banner = FigletText("SAP-1 Emulator", font="doom")
     computer = Computer()
     with ManagedScreen() as screen:
+        banner_frame = Print(screen, banner, 0, colour=screen.COLOUR_GREEN, attr=screen.A_BOLD)
         scenes = [
             Scene([
-                Print(screen, banner, 0, colour=screen.COLOUR_GREEN, attr=screen.A_BOLD),
+                banner_frame,
                 Main(computer, screen, 35, 110, y=10),
             ], name="Main"),
 
             Scene([
-                Print(screen, banner, 0, colour=screen.COLOUR_GREEN, attr=screen.A_BOLD),
+                banner_frame,
                 HardwareView(computer, screen, 35, 100, y=10),
             ],
-                name="HardwareView")
+                name="HardwareView"),
         ]
 
         screen.play(scenes)
@@ -77,23 +78,6 @@ class Main(Frame):
         raise NextScene("Main")
 
 
-class MemoryView(Frame):
-
-    def __init__(self, computer: Computer, screen, height, width, data=None, on_load=None,
-                 has_border=True,
-                 hover_focus=False, name=None, title=None, x=None, y=None, has_shadow=False,
-                 reduce_cpu=False, is_modal=False, can_scroll=True):
-        super().__init__(screen, height, width, data, on_load, has_border, hover_focus, name, title, x,
-                         y, has_shadow, reduce_cpu, is_modal, can_scroll)
-
-        self._computer = computer
-        self.fix()
-
-        @property
-        def computer(self) -> Computer:
-            return self._computer
-
-
 class HardwareView(Frame):
     def __init__(self, computer: Computer, screen, height, width, data=None, on_load=None,
                  has_border=True,
@@ -103,15 +87,23 @@ class HardwareView(Frame):
                          y, has_shadow, reduce_cpu, is_modal, can_scroll)
         self._computer = computer
 
-        @property
-        def computer(self) -> Computer:
-            return self._computer
-
-        layout = Layout([2])
+        layout = Layout([1, 3, 2, 4])
         self.add_layout(layout)
+        layout.add_widget(Label("Address", align="^"), 0)
+        layout.add_widget(Label("Value", align="^"), 1)
+        layout.add_widget(Label("Component", align="^"), 2)
+        layout.add_widget(Label("Value", align='^'), 3)
 
+        for key in self.computer.ram.memory:
+            layout.add_widget(Label(key, align='^'), 0)
+            layout.add_widget(Label(self.computer.ram.memory[key], align='^'), 1)
         layout.add_widget(Button("go back", on_click=self.on_click))
+
         self.fix()
+
+    @property
+    def computer(self) -> Computer:
+        return self._computer
 
     def on_click(self):
         raise NextScene("Main")
