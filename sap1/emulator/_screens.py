@@ -1,11 +1,13 @@
+import pathlib
+
 from asciimatics.effects import Print
 from asciimatics.exceptions import NextScene, StopApplication
 from asciimatics.renderers import FigletText
 from asciimatics.scene import Scene
 from asciimatics.screen import ManagedScreen
-from asciimatics.widgets import Frame, Layout, Button, Label, Divider
+from asciimatics.widgets import Frame, Layout, Button, Label, Divider, FileBrowser
 
-from ._runtime import Computer
+from ._runtime import Computer, load_memory_from_buffer
 
 ADDRESS_COL = 0
 RAM_VAL_COL = 1
@@ -29,6 +31,10 @@ def run_menu_system(computer: Computer):
                 HardwareView(computer, screen, 35, 110, y=10),
             ],
                 name="HardwareView"),
+            Scene([
+                banner_frame,
+                LoadMemory(computer, screen, 35, 110, y=10)
+            ], name="LoadMemory")
         ]
 
         screen.play(scenes)
@@ -48,7 +54,7 @@ class Main(Frame):
         layout = Layout([6], fill_frame=True)
         self.add_layout(layout)
         layout.add_widget(Label("SAP-1 Emulator Version 0.0.0 by Joshua (Theunkn0wn1) Salzedo"))
-        layout.add_widget(Button("Load Program...", on_click=self.on_view_memory))
+        layout.add_widget(Button("Load Program...", on_click=self.on_load_memory))
         layout.add_widget(Button("View hardware...", on_click=self.on_view_hardware))
         layout.add_widget(Button("Advanced options...", on_click=...))
         layout.add_widget(Button("Execute program", on_click=...))
@@ -68,8 +74,8 @@ class Main(Frame):
         # Do standard reset to clear out form, then populate with new data.
         super().reset()
 
-    def on_view_memory(self):
-        raise NextScene("MemoryView")
+    def on_load_memory(self):
+        raise NextScene("LoadMemory")
 
     def on_view_hardware(self):
         raise NextScene("HardwareView")
@@ -80,7 +86,7 @@ class Main(Frame):
 
     @staticmethod
     def _cancel():
-        raise NextScene("Main")
+        raise StopApplication("cancel")
 
 
 class HardwareView(Frame):
@@ -156,3 +162,32 @@ class LoadMemory(Frame):
     """
     Memory loading
     """
+
+    def __init__(self, computer, screen, height, width, data=None, on_load=None, has_border=True,
+                 hover_focus=False, name=None, title=None, x=None, y=None, has_shadow=False,
+                 reduce_cpu=False, is_modal=False, can_scroll=True):
+        super().__init__(screen, height, width, data, on_load, has_border, hover_focus, name, title, x,
+                         y, has_shadow, reduce_cpu, is_modal, can_scroll)
+
+        self._computer = computer
+
+        main_layout = Layout([1])
+        self.add_layout(main_layout)
+
+        main_layout.add_widget(FileBrowser(10, ".", file_filter=r".*.sap1$",
+                                           name="fileSelector", on_select=self.on_select
+
+                                           ))
+
+        self.fix()
+
+    @property
+    def computer(self) -> Computer:
+        return self._computer
+
+    def on_select(self):
+        widget = self.find_widget("fileSelector")
+        target = pathlib.Path(widget.value)
+        target.resolve(strict=True)
+        load_memory_from_buffer(target.read_text().rstrip("\n"), self.computer.mar, self.computer.ram)
+        raise NextScene("Main")
