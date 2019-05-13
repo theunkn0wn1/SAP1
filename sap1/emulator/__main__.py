@@ -44,6 +44,6 @@ if __name__ == '__main__':
         exit(1)
 
     if namespace.legacy_shell:
-        runtime(memory_target, namespace)
+        runtime(memory_target, namespace, Computer())
     else:
         run_menu_system(Computer())

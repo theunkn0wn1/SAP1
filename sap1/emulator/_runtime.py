@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pathlib
 from argparse import Namespace
 from dataclasses import dataclass
@@ -8,6 +10,19 @@ from humanfriendly import AutomaticSpinner
 from sap1.emulator import hardware
 from sap1.emulator.hardware import Mar, Ram
 from sap1.emulator.hardware.register import RegisterReadOnly
+
+
+@dataclass
+class Computer:
+    program_counter: hardware.ProgramCounter = hardware.ProgramCounter()
+    instruction_register: hardware.InstructionRegister = hardware.InstructionRegister()
+    mar: hardware.Mar = hardware.Mar()
+    control: hardware.ControlUnit = hardware.ControlUnit(instruction_register)
+    ram: hardware.Ram = hardware.Ram(mar)
+    output_register: RegisterReadOnly = RegisterReadOnly('O')
+    register_a: hardware.Register = hardware.Register('A')
+    register_b: hardware.Register = hardware.Register('B')
+    alu: hardware.ALU = hardware.ALU(register_a, register_b)
 
 
 def load_memory_from_buffer(buffer: str, mar: Mar, ram: Ram):
@@ -22,7 +37,7 @@ def load_memory_from_buffer(buffer: str, mar: Mar, ram: Ram):
         print(ram.value)
 
 
-def runtime(memory_path: pathlib.Path, configuration: Namespace):
+def runtime(memory_path: pathlib.Path, configuration: Namespace, computer: Computer):
     with AutomaticSpinner("pre flight checks passed. initializing...."):
         print("initializing components...")
 
@@ -71,19 +86,6 @@ def runtime(memory_path: pathlib.Path, configuration: Namespace):
             input("press enter to step forward")
 
             should_stop = computer.control.word.HLT or computer.control.word.OI
-
-
-@dataclass
-class Computer:
-    program_counter: hardware.ProgramCounter = hardware.ProgramCounter()
-    instruction_register: hardware.InstructionRegister = hardware.InstructionRegister()
-    mar: hardware.Mar = hardware.Mar()
-    control: hardware.ControlUnit = hardware.ControlUnit(instruction_register)
-    ram: hardware.Ram = hardware.Ram(mar)
-    output_register: RegisterReadOnly = RegisterReadOnly('O')
-    register_a: hardware.Register = hardware.Register('A')
-    register_b: hardware.Register = hardware.Register('B')
-    alu: hardware.ALU = hardware.ALU(register_a, register_b)
 
 
 def init_components():
