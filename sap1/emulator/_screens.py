@@ -94,7 +94,8 @@ class HardwareView(Frame):
                  has_border=True,
                  hover_focus=False, name=None, title=None, x=None, y=None, has_shadow=False,
                  reduce_cpu=False, is_modal=False, can_scroll=True):
-        super().__init__(screen, height, width, data, on_load, has_border, hover_focus, name, title, x,
+        super().__init__(screen, height, width, data, self.on_load, has_border, hover_focus, name,
+                         title, x,
                          y, has_shadow, reduce_cpu, is_modal, can_scroll)
         self._computer = computer
 
@@ -134,18 +135,20 @@ class HardwareView(Frame):
         self.add_label(component_layout, "IR operand", COMPONENT_LABEL_COL)
         self.add_label(component_layout, self.computer.instruction_register.operand, COMPONENT_VAL_COL)
 
-        layout2 = Layout([10])
+        layout2 = Layout([5, 5])
         self.add_layout(layout2)
         layout2.add_widget(Divider(), 0)
 
         self.add_label(layout2, "Control Word", 0)
         self.add_label(layout2, self.computer.program_counter.control_word, 0)
 
-        layout2.add_widget(Button("go back", on_click=self.on_click))
+        layout2.add_widget(Button("go back", on_click=self.on_click), 0)
+        layout2.add_widget(Button("refresh", on_click=self.on_refresh), 1)
 
         self.fix()
 
-    def add_label(self, layout, value, col):
+    @staticmethod
+    def add_label(layout, value, col):
         layout.add_widget(Label(value, align=ALLIGN), col)
 
     @property
@@ -154,6 +157,13 @@ class HardwareView(Frame):
 
     def on_click(self):
         raise NextScene("Main")
+
+    def on_load(self):
+        print(f"{self.on_load} called!")
+
+    def on_refresh(self):
+        print(f"{self.on_refresh} called!")
+        self.__init__(self.computer, self.screen, 35, 110, y=20)
 
     ...
 
@@ -176,7 +186,6 @@ class LoadMemory(Frame):
 
         main_layout.add_widget(FileBrowser(10, ".", file_filter=r".*.sap1$",
                                            name="fileSelector", on_select=self.on_select
-
                                            ))
 
         self.fix()

@@ -33,6 +33,7 @@ def load_memory_from_buffer(buffer: str, mar: Mar, ram: Ram):
     for i, line in enumerate(lines):
         mar.memory = bitarray(f"{i:0>4b}")
         ram.value = bitarray(line)
+        ram.value
         assert len(ram.value) == 8, "invalid memory word!"
         print(ram.value)
 
