@@ -3,7 +3,7 @@ from asciimatics.exceptions import NextScene, StopApplication
 from asciimatics.renderers import FigletText
 from asciimatics.scene import Scene
 from asciimatics.screen import ManagedScreen
-from asciimatics.widgets import Frame, Layout, Button, Label
+from asciimatics.widgets import Frame, Layout, Button, Label, Divider
 
 from ._runtime import Computer
 
@@ -93,24 +93,46 @@ class HardwareView(Frame):
                          y, has_shadow, reduce_cpu, is_modal, can_scroll)
         self._computer = computer
 
-        layout = Layout([RAM_VAL_COL, COMPONENT_VAL_COL, COMPONENT_LABEL_COL, COMPONENT_VAL_COL])
-        self.add_layout(layout)
-        layout.add_widget(Label("Address", align=ALLIGN), ADDRESS_COL)
-        layout.add_widget(Label("Value", align=ALLIGN), RAM_VAL_COL)
-        layout.add_widget(Label("Component", align=ALLIGN), COMPONENT_LABEL_COL)
-        layout.add_widget(Label("Value", align=ALLIGN), COMPONENT_VAL_COL)
+        component_layout = Layout([RAM_VAL_COL, COMPONENT_VAL_COL, COMPONENT_LABEL_COL, COMPONENT_VAL_COL])
+        self.add_layout(component_layout)
+        component_layout.add_widget(Label("Address", align=ALLIGN), ADDRESS_COL)
+        component_layout.add_widget(Label("Value", align=ALLIGN), RAM_VAL_COL)
+        component_layout.add_widget(Label("Component", align=ALLIGN), COMPONENT_LABEL_COL)
+        component_layout.add_widget(Label("Value", align=ALLIGN), COMPONENT_VAL_COL)
 
         for key in self.computer.ram.memory:
-            self.add_label(layout, key, ADDRESS_COL)
-            self.add_label(layout, self.computer.ram.memory[key], RAM_VAL_COL)
+            self.add_label(component_layout, key, ADDRESS_COL)
+            self.add_label(component_layout, self.computer.ram.memory[key], RAM_VAL_COL)
 
-        self.add_label(layout, "A Register", COMPONENT_LABEL_COL)
-        self.add_label(layout, self.computer.register_a.memory, COMPONENT_VAL_COL)
+        self.add_label(component_layout, "A Register", COMPONENT_LABEL_COL)
+        self.add_label(component_layout, self.computer.register_a.memory, COMPONENT_VAL_COL)
 
-        self.add_label(layout, "B Register", COMPONENT_LABEL_COL)
-        self.add_label(layout, self.computer.register_b.memory, COMPONENT_VAL_COL)
+        self.add_label(component_layout, "B Register", COMPONENT_LABEL_COL)
+        self.add_label(component_layout, self.computer.register_b.memory, COMPONENT_VAL_COL)
 
-        layout.add_widget(Button("go back", on_click=self.on_click))
+        self.add_label(component_layout, "Output Register", COMPONENT_LABEL_COL)
+        self.add_label(component_layout, self.computer.output_register.memory, COMPONENT_VAL_COL)
+
+        self.add_label(component_layout, "ALU", COMPONENT_LABEL_COL)
+        self.add_label(component_layout, self.computer.alu.value, COMPONENT_VAL_COL)
+
+        self.add_label(component_layout, "Program Counter", COMPONENT_LABEL_COL)
+        self.add_label(component_layout, self.computer.program_counter.count, COMPONENT_VAL_COL)
+
+        self.add_label(component_layout, "IR raw", COMPONENT_LABEL_COL)
+        self.add_label(component_layout, self.computer.instruction_register.memory, COMPONENT_VAL_COL)
+
+        self.add_label(component_layout, "IR opcode", COMPONENT_LABEL_COL)
+        self.add_label(component_layout, self.computer.instruction_register.opcode, COMPONENT_VAL_COL)
+
+        self.add_label(component_layout, "IR operand", COMPONENT_LABEL_COL)
+        self.add_label(component_layout, self.computer.instruction_register.operand, COMPONENT_VAL_COL)
+        layout2 = Layout([1, 1])
+        self.add_layout(layout2)
+        layout2.add_widget(Divider(), 0)
+        layout2.add_widget(Divider(), 1)
+
+        layout2.add_widget(Button("go back", on_click=self.on_click))
 
         self.fix()
 
