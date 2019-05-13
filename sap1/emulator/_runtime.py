@@ -35,14 +35,11 @@ def load_memory_from_buffer(buffer: str, mar: Mar, ram: Ram):
         ram.value = bitarray(line)
         ram.value
         assert len(ram.value) == 8, "invalid memory word!"
-        print(ram.value)
+        # print(ram.value)
 
 
 def runtime(memory_path: pathlib.Path, configuration: Namespace, computer: Computer):
     with AutomaticSpinner("pre flight checks passed. initializing...."):
-        print("initializing components...")
-
-        computer = init_components()
 
         print(f"OK.\nLoading memory profile {memory_path.resolve()} ....")
         raw_memory = memory_path.read_text()
