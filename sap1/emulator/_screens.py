@@ -135,15 +135,14 @@ class HardwareView(Frame):
         self.add_label(component_layout, "IR operand", COMPONENT_LABEL_COL)
         self.add_label(component_layout, self.computer.instruction_register.operand, COMPONENT_VAL_COL)
 
-        layout2 = Layout([5, 5])
+        layout2 = Layout([5])
         self.add_layout(layout2)
         layout2.add_widget(Divider(), 0)
 
         self.add_label(layout2, "Control Word", 0)
         self.add_label(layout2, self.computer.program_counter.control_word, 0)
 
-        layout2.add_widget(Button("go back", on_click=self.on_click), 0)
-        layout2.add_widget(Button("refresh", on_click=self.on_refresh), 1)
+        layout2.add_widget(Button("continue", on_click=self.on_click), 0)
 
         self.fix()
 
@@ -159,11 +158,11 @@ class HardwareView(Frame):
         raise NextScene("Main")
 
     def on_load(self):
-        print(f"{self.on_load} called!")
+        # print(f"{self.on_load} called!")
         self.on_refresh()
 
     def on_refresh(self):
-        print(f"{self.on_refresh} called!")
+        # print(f"{self.on_refresh} called!")
         self.__init__(self.computer, self.screen, 35, 110, y=20)
 
     ...
