@@ -93,7 +93,8 @@ class HardwareView(Frame):
                          y, has_shadow, reduce_cpu, is_modal, can_scroll)
         self._computer = computer
 
-        component_layout = Layout([RAM_VAL_COL, COMPONENT_VAL_COL, COMPONENT_LABEL_COL, COMPONENT_VAL_COL])
+        component_layout = Layout(
+            [RAM_VAL_COL, COMPONENT_VAL_COL, COMPONENT_LABEL_COL, COMPONENT_VAL_COL])
         self.add_layout(component_layout)
         component_layout.add_widget(Label("Address", align=ALLIGN), ADDRESS_COL)
         component_layout.add_widget(Label("Value", align=ALLIGN), RAM_VAL_COL)
@@ -103,6 +104,9 @@ class HardwareView(Frame):
         for key in self.computer.ram.memory:
             self.add_label(component_layout, key, ADDRESS_COL)
             self.add_label(component_layout, self.computer.ram.memory[key], RAM_VAL_COL)
+
+        self.add_label(component_layout, "Program Counter", COMPONENT_LABEL_COL)
+        self.add_label(component_layout, self.computer.program_counter.count, COMPONENT_VAL_COL)
 
         self.add_label(component_layout, "A Register", COMPONENT_LABEL_COL)
         self.add_label(component_layout, self.computer.register_a.memory, COMPONENT_VAL_COL)
@@ -115,9 +119,6 @@ class HardwareView(Frame):
 
         self.add_label(component_layout, "ALU", COMPONENT_LABEL_COL)
         self.add_label(component_layout, self.computer.alu.value, COMPONENT_VAL_COL)
-
-        self.add_label(component_layout, "Program Counter", COMPONENT_LABEL_COL)
-        self.add_label(component_layout, self.computer.program_counter.count, COMPONENT_VAL_COL)
 
         self.add_label(component_layout, "IR raw", COMPONENT_LABEL_COL)
         self.add_label(component_layout, self.computer.instruction_register.memory, COMPONENT_VAL_COL)
