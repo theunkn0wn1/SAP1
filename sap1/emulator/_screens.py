@@ -160,6 +160,7 @@ class HardwareView(Frame):
 
     def on_load(self):
         print(f"{self.on_load} called!")
+        self.on_refresh()
 
     def on_refresh(self):
         print(f"{self.on_refresh} called!")
