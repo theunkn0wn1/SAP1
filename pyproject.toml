@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "sap1"
+version = "0.1.0"
+description = ""
+authors = ["Joshua Salzedo <jsalzedo0@saddleback.edu>"]
+
+[tool.poetry.dependencies]
+python = ">=3.7"
+bitarray = "^1.6.1"
+humanfriendly = "^9.1"
+asciimatics = "^1.12.0"
+
+[tool.poetry.dev-dependencies]
+ipython = "^7.19.0"
+pytest = "^6.2.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
