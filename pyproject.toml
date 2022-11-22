@@ -11,7 +11,7 @@ humanfriendly = "^9.1"
 asciimatics = "^1.12.0"
 
 [tool.poetry.dev-dependencies]
-ipython = "^7.19.0"
+ipython = "^7.31.1"
 pytest = "^6.2.0"
 
 [build-system]
